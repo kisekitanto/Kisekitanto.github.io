@@ -47,23 +47,18 @@ function smoothScrollTo(selector) {
 // ============================================================================
 
 function initScrollReveal() {
-  // Select all elements with .reveal class
   const revealElements = document.querySelectorAll('.reveal');
 
-  // If user prefers reduced motion, show everything immediately
   if (prefersReducedMotion()) {
     revealElements.forEach(el => el.classList.add('visible'));
     return;
   }
 
-  // Observer options:
-  // - threshold: 0.1 = trigger when 10% visible
-  // - rootMargin: negative bottom = trigger slightly before element enters viewport
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // Only animate once
+        observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
@@ -85,7 +80,6 @@ function initActiveNav() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.getAttribute('id');
-        // Update active state on all nav links
         navLinks.forEach(link => {
           link.classList.toggle('active', link.dataset.nav === id);
         });
@@ -93,7 +87,7 @@ function initActiveNav() {
     });
   }, {
     threshold: 0.4,
-    rootMargin: '-80px 0px -60% 0px' // Account for sticky nav height
+    rootMargin: '-80px 0px -60% 0px'
   });
 
   sections.forEach(sec => observer.observe(sec));
@@ -112,8 +106,8 @@ function initStatCounters() {
         const el = entry.target;
         const target = parseInt(el.dataset.count, 10);
         let current = 0;
-        const duration = 1200; // ms
-        const step = target / (duration / 16); // 60fps approximation
+        const duration = 1200;
+        const step = target / (duration / 16);
 
         function animate() {
           current += step;
@@ -126,7 +120,7 @@ function initStatCounters() {
         }
 
         animate();
-        observer.unobserve(el); // Only animate once
+        observer.unobserve(el);
       }
     });
   }, { threshold: 0.5 });
@@ -147,10 +141,8 @@ function initTerminal() {
   const terminalMinimize = document.getElementById('terminalMinimize');
   const promptLine = document.getElementById('promptLine');
 
-  if (!terminalToggle || !terminal || !terminalBody || !terminalInput) return;
+  if (!terminalToggle || !terminal || !terminalBody || !terminalInput || !promptLine) return;
 
-  // --- COMMAND DEFINITIONS ---
-  // Add new commands here: 'commandName': { output: 'text', type: 'info|success|warning|error|dim' }
   const commands = {
     help: {
       output: `Available commands:
@@ -219,32 +211,27 @@ You're welcome.`,
     }
   };
 
-  // --- TERMINAL STATE ---
   let terminalHistory = [];
   let historyIndex = -1;
   let isProcessing = false;
 
-  // --- HELPER: Escape HTML ---
   function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  // --- HELPER: Append output line ---
   function appendOutput(text, type = 'output') {
     const div = document.createElement('div');
-    div.className = `terminal-line output`;
+    div.className = 'terminal-line output';
     const escaped = escapeHtml(text);
-    const typeClass = type !== 'output' ? ` terminal-output.${type}` : '';
+    const typeClass = type !== 'output' ? ` terminal-output-${type}` : '';
     div.innerHTML = `<span class="terminal-output${typeClass}">${escaped.replace(/\n/g, '<br>')}</span>`;
-    
-    // Insert before prompt line
+
     terminalBody.insertBefore(div, promptLine);
     terminalBody.scrollTop = terminalBody.scrollHeight;
   }
 
-  // --- HELPER: Append command echo ---
   function appendEcho(cmd) {
     const div = document.createElement('div');
     div.className = 'terminal-line echo';
@@ -253,24 +240,22 @@ You're welcome.`,
     terminalBody.scrollTop = terminalBody.scrollHeight;
   }
 
-  // --- HELPER: Clear terminal (keep welcome banner) ---
   function clearTerminal() {
-    // Remove all lines except welcome and prompt
-    const lines = terminalBody.querySelectorAll('.terminal-line:not(.terminal-welcome):not(.terminal-prompt-line)');
-    lines.forEach(line => line.remove());
+    const lines = terminalBody.querySelectorAll('.terminal-line');
+    lines.forEach(line => {
+      if (line === promptLine) return;
+      if (line.classList.contains('terminal-welcome')) return;
+      line.remove();
+    });
   }
 
-  // --- HELPER: Process a command ---
   function processCommand(cmd) {
     if (isProcessing) return;
     isProcessing = true;
 
     const cleanCmd = cmd.trim().toLowerCase();
-    
-    // Show what user typed
+
     appendEcho(cmd);
-    
-    // Clear input
     terminalInput.value = '';
 
     if (!cleanCmd) {
@@ -278,7 +263,6 @@ You're welcome.`,
       return;
     }
 
-    // Built-in commands
     if (cleanCmd === 'clear') {
       clearTerminal();
       isProcessing = false;
@@ -290,10 +274,8 @@ You're welcome.`,
       return;
     }
 
-    // Defined commands
     if (commands[cleanCmd]) {
       const { output, type } = commands[cleanCmd];
-      // Simulate slight delay for realism
       setTimeout(() => {
         appendOutput(output, type);
         isProcessing = false;
@@ -306,7 +288,6 @@ You're welcome.`,
     }
   }
 
-  // --- KEYBOARD EVENTS FOR INPUT ---
   terminalInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -319,7 +300,6 @@ You're welcome.`,
       if (historyIndex > 0) {
         historyIndex--;
         terminalInput.value = terminalHistory[historyIndex];
-        // Move cursor to end
         terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length);
       }
     } else if (e.key === 'ArrowDown') {
@@ -333,7 +313,6 @@ You're welcome.`,
       }
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      // Tab completion for known commands
       const val = terminalInput.value.toLowerCase();
       const matches = Object.keys(commands).filter(c => c.startsWith(val));
       if (matches.length === 1) {
@@ -347,14 +326,12 @@ You're welcome.`,
     }
   });
 
-  // Focus input on click anywhere in terminal body
   terminalBody.addEventListener('click', (e) => {
     if (e.target === terminalBody || e.target.closest('.terminal-line.output')) {
       terminalInput.focus();
     }
   });
 
-  // --- HEADER BUTTONS ---
   if (terminalClear) {
     terminalClear.addEventListener('click', clearTerminal);
   }
@@ -362,11 +339,9 @@ You're welcome.`,
     terminalMinimize.addEventListener('click', closeTerminal);
   }
 
-  // --- OPEN/CLOSE TERMINAL ---
   function openTerminal() {
     terminal.classList.add('open');
     terminalToggle.style.display = 'none';
-    // Focus input after animation
     setTimeout(() => terminalInput.focus(), 120);
   }
 
@@ -375,15 +350,12 @@ You're welcome.`,
     terminalToggle.style.display = 'flex';
   }
 
-  // --- EVENT LISTENERS ---
   terminalToggle.addEventListener('click', openTerminal);
 
-  // Click outside terminal to close (but not on header/buttons)
   terminal.addEventListener('click', (e) => {
     if (e.target === terminal) closeTerminal();
   });
 
-  // ESC to close, Ctrl+` to toggle
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && terminal.classList.contains('open')) {
       closeTerminal();
@@ -395,7 +367,6 @@ You're welcome.`,
     }
   });
 
-  // Initial focus handler
   terminalInput.addEventListener('focus', () => {
     promptLine.classList.add('focused');
   });
@@ -419,7 +390,7 @@ function initSmoothScroll() {
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        history.pushState(null, '', targetId); // Update URL without jump
+        history.pushState(null, '', targetId);
       }
     });
   });
@@ -454,7 +425,6 @@ function initParallax() {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize all modules
   initScrollReveal();
   initActiveNav();
   initStatCounters();
@@ -462,11 +432,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initParallax();
 
-  // Respect reduced motion for scanline animation
   if (prefersReducedMotion()) {
     const scanline = document.querySelector('.scanline');
     if (scanline) scanline.style.animation = 'none';
   }
 
-  console.log('🎮 Portfolio loaded. Press Ctrl+\` for terminal.');
+  console.log('🎮 Portfolio loaded. Press Ctrl+` for terminal.');
 });
