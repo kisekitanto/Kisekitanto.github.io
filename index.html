@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kisekitanto — Game Dev & Chaos Engineer</title>
+
+  <!-- Fonts: Inter (UI) + JetBrains Mono (code/technical) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet (external for easy editing) -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ========================================================================
+       BACKGROUND ATMOSPHERE (Fixed position, behind everything)
+       - .bg-gradient: radial gradients for accent glows
+       - .grid-overlay: subtle grid pattern with radial mask
+       - .scanline: animated CRT scanline effect
+       ======================================================================== -->
+  <div class="bg-atmosphere" aria-hidden="true">
+    <div class="bg-gradient"></div>
+    <div class="grid-overlay"></div>
+    <div class="scanline"></div>
+  </div>
+
+  <!-- ========================================================================
+       NAVIGATION (Sticky, backdrop blur)
+       - .nav-links: desktop navigation (hidden on mobile <640px)
+       - .nav-cta: primary CTA button
+       ======================================================================== -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="page nav-inner">
+      <a href="#" class="logo" aria-label="Home">
+        <span class="logo-mark">K</span>
+        Kisekitanto
+      </a>
+      <div class="nav-links">
+        <a href="#projects" class="nav-link" data-nav="projects">Projects</a>
+        <a href="#download" class="nav-link" data-nav="download">Download</a>
+        <a href="#journey" class="nav-link" data-nav="journey">Journey</a>
+        <a href="#stack" class="nav-link" data-nav="stack">Stack</a>
+        <a href="#about" class="nav-link" data-nav="about">About</a>
+      </div>
+      <button class="nav-cta" onclick="smoothScrollTo('#contact')">Get in Touch</button>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       MAIN CONTENT
+       ======================================================================== -->
+  <main class="page">
+    <!-- HERO -->
+    <header class="hero reveal">
+      <div class="hero-badge" aria-label="Status: actively building">
+        <span class="dot" aria-hidden="true"></span>
+        Currently building: Godot 4.7 RPG + Procedural World Gen
+      </div>
+      <h1>
+        Building games that<br><span class="accent-word">don't suck</span>
+      </h1>
+      <p class="lead">
+        Indie dev from Indonesia crafting 2D top-down RPGs with procedural worlds,
+        stamina-gated combat, and way too many TileMapLayers. Learning in public,
+        breaking things on purpose, and documenting the chaos.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#journey" class="btn btn-ghost">Dev Timeline</a>
+      </div>
+    </header>
+
+    <!-- STATS BAR -->
+    <section class="stats reveal" aria-label="Quick stats">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-value" data-count="4">0</div>
+          <div class="stat-label">Active Projects</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" data-count="18">0</div>
+          <div class="stat-label">Months of Godot</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" data-count="3">0</div>
+          <div class="stat-label">Biomes Blended</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" data-count="1">0</div>
+          <div class="stat-label">Pre-written Story</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section reveal" aria-labelledby="projects-title">
+      <header class="section-header">
+        <span class="section-label">What I'm Building</span>
+        <h2 id="projects-title" class="section-title">Projects that actually run</h2>
+        <p class="section-desc">No vaporware. No "coming soon." Just code that compiles (eventually) and games you can play.</p>
+      </header>
+      <div class="projects-grid">
+        <!-- Project 1: Main RPG (Featured) -->
+        <article class="project-card featured">
+          <span class="project-badge badge-active">Active Development</span>
+          <h3 class="project-title">Unnamed RPG Project</h3>
+          <p class="project-desc">
+            2D top-down story-driven RPG (Undertale/Stardew vibes) with a pre-written story
+            I've been sitting on for years. TileMapLayer-based environments, state machine
+            movement (idle/walk/run with Shift sprint + normalized diagonals), Dialogic for
+            dialogue, footstep audio with reverb zones. Built in Godot 4.7.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Godot 4.7</span>
+            <span class="tech-tag">GDScript</span>
+            <span class="tech-tag">TileMapLayer</span>
+            <span class="tech-tag">Dialogic</span>
+            <span class="tech-tag">State Machine</span>
+            <span class="tech-tag">Custom Audio</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link" aria-label="View repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              Repo (private for now)
+            </a>
+            <a href="#" class="project-link" aria-label="View devlog">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Devlog entries
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 2: Procedural World Gen -->
+        <article class="project-card">
+          <span class="project-badge badge-wip">Work in Progress</span>
+          <h3 class="project-title">Procedural World Generator</h3>
+          <p class="project-desc">
+            Biome blending system with smooth transitions, coastline-aware beach generation,
+            and real-world geographic reference data. Not just noise layers — actual geographic
+            logic. Rivers that flow downhill, biomes that respect climate zones, beaches that
+            actually hug coastlines. Using Gaea for heightmap prototyping, implementing in Godot.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Godot 4.7</span>
+            <span class="tech-tag">FastNoiseLite</span>
+            <span class="tech-tag">Gaea</span>
+            <span class="tech-tag">Biome Blending</span>
+            <span class="tech-tag">Tile-based</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">Prototype repo</a>
+            <a href="#" class="project-link">Technical notes</a>
+          </div>
+        </article>
+
+        <!-- Project 3: Combat System -->
+        <article class="project-card">
+          <span class="project-badge badge-wip">Work in Progress</span>
+          <h3 class="project-title">Stamina-Gated Combat System</h3>
+          <p class="project-desc">
+            Three damage types (Slice / Pierce / Crush) with distinct hitboxes, stamina costs,
+            and enemy resistances. No mindless button mashing — every swing costs stamina,
+            every dodge has frames, every enemy type demands a different approach. Designed
+            for keyboard+mouse, playable on controller too.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Godot 4.7</span>
+            <span class="tech-tag">State Machine</span>
+            <span class="tech-tag">Hitbox System</span>
+            <span class="tech-tag">AnimationPlayer</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">Combat prototype</a>
+          </div>
+        </article>
+
+        <!-- Project 4: Dialogic Integration -->
+        <article class="project-card">
+          <span class="project-badge badge-concept">Concept / Research</span>
+          <h3 class="project-title">Dialogic-Powered Narrative</h3>
+          <p class="project-desc">
+            Branching dialogue with character portraits, choice tracking, variable conditions,
+            and seamless integration into gameplay (not modal popups). Portuguese/Indonesian
+            localization ready. Using Dialogic 2.x with custom BBCode effects for typewriter,
+            shake, color waves — the works.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Dialogic 2.x</span>
+            <span class="tech-tag">BBCode Effects</span>
+            <span class="tech-tag">Localization</span>
+            <span class="tech-tag">Choice Tracking</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="project-link">Dialogic setup guide</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section id="download" class="section reveal" aria-labelledby="download-title">
+      <header class="section-header">
+        <span class="section-label">Play the Game</span>
+        <h2 id="download-title" class="section-title">Grab a build</h2>
+        <p class="section-desc">Exported Windows builds uploaded to GitHub Releases. No installer, no DRM — just run the .exe</p>
+      </header>
+      <div class="download-grid">
+        <!-- Main RPG Build -->
+        <article class="download-card featured">
+          <div class="download-badge badge-latest">Latest Build</div>
+          <div class="download-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          </div>
+          <h3 class="download-title">Unnamed RPG — Windows</h3>
+          <p class="download-desc">2D top-down RPG with procedural biomes, stamina combat (Slice/Pierce/Crush), Dialogic dialogue, and footstep audio with reverb zones.</p>
+          <div class="download-meta">
+            <span class="download-version" id="downloadVersion">v0.1.0-prealpha</span>
+            <span class="download-size">~45 MB</span>
+            <span class="download-platform">Windows 10/11</span>
+          </div>
+          <div class="download-actions">
+            <a href="https://github.com/kisekitanto/whatever-it-is/blob/main/attempt-number-whatever-it-is%20-%20Copy.zip" target="_blank" rel="noopener" class="btn btn-primary" id="downloadBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Download from GitHub Releases
+            </a>
+            <a href="https://github.com/kisekitanto/whatever-it-is/blob/main/attempt-number-whatever-it-is%20-%20Copy.zip" target="_blank" rel="noopener" class="btn btn-ghost">View All Releases</a>
+          </div>
+          <details class="download-changelog">
+            <summary>Changelog</summary>
+            <div class="changelog-content">
+              <h4>v0.1.0-prealpha <span class="changelog-date">(2026-10-11)</span></h4>
+              <ul>
+                <li>Initial pre-alpha build</li>
+                <li>State machine movement (idle/walk/run with Shift)</li>
+                <li>TileMapLayer environments with autotiles</li>
+                <li>Dialogic dialogue system integration</li>
+                <li>Stamina-gated combat (Slice/Pierce/Crush)</li>
+                <li>Footstep audio with surface variation + reverb zones</li>
+                <li>Known issues: diagonal normalization WIP, biome blending artifacts at chunk boundaries</li>
+              </ul>
+            </div>
+          </details>
+        </article>
+
+        <!-- ProcGen Demo Build (placeholder) -->
+        <article class="download-card">
+          <div class="download-badge badge-soon">Coming Soon</div>
+          <div class="download-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          </div>
+          <h3 class="download-title">Procedural World Demo</h3>
+          <p class="download-desc">Standalone biome blending showcase. Fly through infinite worlds with smooth biome transitions, coastline beaches, and real geographic logic.</p>
+          <div class="download-meta">
+            <span class="download-version">Not yet exported</span>
+            <span class="download-size">—</span>
+            <span class="download-platform">Windows 10/11</span>
+          </div>
+          <div class="download-actions">
+            <button class="btn btn-ghost" disabled>Export pending</button>
+          </div>
+        </article>
+      </div>
+
+      <!-- How to Export Note -->
+      <details class="export-note" open>
+        <summary>🛠 How to create a build yourself (click to expand)</summary>
+        <div class="export-steps">
+          <ol>
+            <li>Open project in Godot 4.7</li>
+            <li><strong>Project → Export</strong> → Click <strong>Add...</strong> → Choose <strong>Windows Desktop</strong></li>
+            <li>Configure: <code>Embed PCK</code> = ON (single .exe), <code>Texture Compression</code> = VRAM (faster load)</li>
+            <li>Click <strong>Export Project</strong> → Save as <code>UnnamedRPG.exe</code></li>
+            <li>Test it runs, then zip it: <code>UnnamedRPG_v0.1.0.zip</code></li>
+            <li>Go to GitHub repo → <strong>Releases</strong> → <strong>Create a new release</strong> → Tag <code>v0.1.0</code> → Upload zip</li>
+            <li>Update the <code>href</code> on the download button above to point to that release</li>
+          </ol>
+          <p class="export-tip"><strong>Pro tip:</strong> Add a <code>CHANGELOG.md</code> to the repo and reference it in the release notes.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- JOURNEY / TIMELINE -->
+    <section id="journey" class="section reveal" aria-labelledby="journey-title">
+      <header class="section-header">
+        <span class="section-label">How I Got Here</span>
+        <h2 id="journey-title" class="section-title">Dev timeline (the honest version)</h2>
+        <p class="section-desc">From "what's a variable?" to "why is my biome blending creating artifacts at chunk boundaries?"</p>
+      </header>
+      <div class="timeline">
+        <article class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <time class="timeline-date" datetime="2024-04">April 2024</time>
+          <h3 class="timeline-title">Downloaded Godot for the first time</h3>
+          <p class="timeline-desc">Thought "2D can't be that hard." Famous last words. Spent week one fighting the camera and wondering why my player walked through walls.</p>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <time class="timeline-date" datetime="2024-07">July 2024</time>
+          <h3 class="timeline-title">First working state machine</h3>
+          <p class="timeline-desc">Idle → Walk → Run with proper transitions. Learned what "normalized diagonals" means the hard way (player moved faster diagonally for 3 months).</p>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <time class="timeline-date" datetime="2024-10">October 2024</time>
+          <h3 class="timeline-title">Discovered TileMapLayers & autotiles</h3>
+          <p class="timeline-desc">Stopped placing tiles one by one like a caveman. Terrain sets + bitmasks = actual level design workflow. Also found Dialogic and stopped hardcoding dialogue in JSON.</p>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <time class="timeline-date" datetime="2025-01">January 2025</time>
+          <h3 class="timeline-title">Procedural generation rabbit hole</h3>
+          <p class="timeline-desc">Started with "I want infinite worlds." Ended up researching Perlin noise, voronoi diagrams, and why my beaches kept spawning in the middle of forests. Gaea entered the chat.</p>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <time class="timeline-date" datetime="2025-07">July 2025</time>
+          <h3 class="timeline-title">Scope creep: the project</h3>
+          <p class="timeline-desc">Went from "simple RPG" to "biome blending with real geographic logic, stamina combat with 3 damage types, reverb zones, footstep variation by surface." The story is still the same though.</p>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <time class="timeline-date" datetime="2026-10">October 2026</time>
+          <h3 class="timeline-title">Right now</h3>
+          <p class="timeline-desc">Debugging := type inference errors, fighting file corruption from automated tools, learning to implement features manually with precise instructions. Also built this portfolio. Hi.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="stack" class="section reveal" aria-labelledby="stack-title">
+      <header class="section-header">
+        <span class="section-label">Tools of the Trade</span>
+        <h2 id="stack-title" class="section-title">Stack I actually use daily</h2>
+        <p class="section-desc">No "I know React" filler. Just what's in the project folder right now.</p>
+      </header>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3 class="skill-category-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            Engine & Core
+          </h3>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Godot 4.7</span>
+            <span class="skill-tag primary">GDScript</span>
+            <span class="skill-tag">TileMapLayer</span>
+            <span class="skill-tag">AnimationPlayer</span>
+            <span class="skill-tag">AudioStreamPlayer</span>
+            <span class="skill-tag">State Machine Pattern</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3 class="skill-category-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+            Plugins & Addons
+          </h3>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Dialogic 2.x</span>
+            <span class="skill-tag">Gaea (heightmaps)</span>
+            <span class="skill-tag">FastNoiseLite</span>
+            <span class="skill-tag">Godot Steering Framework</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3 class="skill-category-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            Version Control & Workflow
+          </h3>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Git + GitHub</span>
+            <span class="skill-tag">Manual commits (no auto-commit)</span>
+            <span class="skill-tag">Feature branches</span>
+            <span class="skill-tag">CHANGELOG.md discipline</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3 class="skill-category-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Learning & Debugging
+          </h3>
+          <div class="skill-tags">
+            <span class="skill-tag primary">Reading source over tutorials</span>
+            <span class="skill-tag">Godot docs (the real ones)</span>
+            <span class="skill-tag">Print debugging > breakpoints</span>
+            <span class="skill-tag">:= type inference pain</span>
+            <span class="skill-tag">Array[Type] confusion</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3 class="skill-category-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Community & Inspiration
+          </h3>
+          <div class="skill-tags">
+            <span class="skill-tag">r/godot (lurking mostly)</span>
+            <span class="skill-tag">GDQuest / HeartBeast</span>
+            <span class="skill-tag">Minecraft world gen papers</span>
+            <span class="skill-tag">Real geography textbooks</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section reveal" aria-labelledby="about-title">
+      <header class="section-header">
+        <span class="section-label">Behind the Code</span>
+        <h2 id="about-title" class="section-title">The human (mostly)</h2>
+      </header>
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>Things that aren't code</h3>
+          <div class="fact-list">
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <div class="fact-text"><strong>Location:</strong> Indonesia (SEA timezone)</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <div class="fact-text"><strong>Age:</strong> 15 (yes, really)</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <div class="fact-text"><strong>Coding since:</strong> 2024 (total beginner)</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+              <div class="fact-text"><strong>First engine:</strong> Godot (no Unity trauma)</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <div class="fact-text"><strong>Game inspirations:</strong> Undertale, Stardew Valley, Minecraft</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              <div class="fact-text"><strong>Browser:</strong> Opera on Win11, Chrome Mobile on Android</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <div class="fact-text"><strong>Story status:</strong> Pre-written, waiting for the engine to catch up</div>
+            </div>
+            <div class="fact">
+              <svg class="fact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              <div class="fact-text"><strong>Code style:</strong> Manual edits > automated corruption</div>
+            </div>
+          </div>
+        </div>
+        <div class="quote-card">
+          <blockquote>
+            "I catch what breaks — := type errors, duplicate-line parse failures —
+            but I ask 'why' instead of guessing the cause. The story's done.
+            The code just needs to stop fighting me."
+          </blockquote>
+          <cite>— <strong>Kisekitanto</strong>, debugging at 2am</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact reveal" aria-labelledby="contact-title">
+      <header class="section-header">
+        <span class="section-label">Let's Build Something</span>
+        <h2 id="contact-title" class="section-title">Open to collabs, feedback, or just yelling about Godot</h2>
+      </header>
+      <div class="contact-links">
+        <a href="mailto:abdurrahman04791@gmail.com" class="contact-link primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Email me
+        </a>
+        <a href="https://github.com/Kisekitanto" target="_blank" rel="noopener" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          GitHub
+        </a>
+        <a href="https://godotengine.org/qa/user/Kisekitanto" target="_blank" rel="noopener" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+          Godot Q&A
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="page">
+      <p class="footer-text">Built with Godot, written in VS Code, deployed from a terminal.</p>
+      <div class="footer-links">
+        <a href="#projects" class="footer-link">Projects</a>
+        <a href="#journey" class="footer-link">Journey</a>
+        <a href="#stack" class="footer-link">Stack</a>
+        <a href="#about" class="footer-link">About</a>
+        <a href="#contact" class="footer-link">Contact</a>
+      </div>
+      <p class="footer-text" style="margin-top: 16px; font-size: 11px;">
+        No frameworks. No build step. Just HTML, CSS, and an unhealthy amount of CSS variables.
+        <br>Design inspired by Linear's precision — because if you're gonna steal, steal from the best.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       TERMINAL EASTER EGG (Hidden dev console)
+       - Toggle with Ctrl+\` or click the corner button
+       - Type 'help' for commands
+       ======================================================================== -->
+  <button class="terminal-toggle" id="terminalToggle" aria-label="Open terminal" title="Press Ctrl+\` or click to open terminal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+  </button>
+
+  <div class="terminal-easter-egg" id="terminal" role="dialog" aria-label="Terminal easter egg">
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+      </div>
+      <span class="terminal-title">portfolio.term ~ $</span>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <div class="terminal-line"><span class="terminal-prompt">kiseki@portfolio:~$</span> <span class="terminal-output">Welcome to the secret terminal. Type 'help' for commands.</span></div>
+      <div class="terminal-line"><span class="terminal-prompt">kiseki@portfolio:~$</span> <span class="terminal-output">_</span></div>
+    </div>
+    <div class="terminal-input-line">
+      <span class="terminal-prompt">kiseki@portfolio:~$</span>
+      <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false" aria-label="Terminal input">
+    </div>
+  </div>
+
+  <!-- External JavaScript (linked at end of body for performance) -->
+  <script src="script.js"></script>
+</body>
+</html>
