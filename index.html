@@ -499,30 +499,66 @@
   </footer>
 
   <!-- ========================================================================
-       TERMINAL EASTER EGG (Hidden dev console)
+       TERMINAL EASTER EGG (Hidden dev console - Professional)
        - Toggle with Ctrl+\` or click the corner button
        - Type 'help' for commands
        ======================================================================== -->
   <button class="terminal-toggle" id="terminalToggle" aria-label="Open terminal" title="Press Ctrl+\` or click to open terminal">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+    <span class="terminal-toggle-tooltip">Terminal (Ctrl+`)</span>
   </button>
 
-  <div class="terminal-easter-egg" id="terminal" role="dialog" aria-label="Terminal easter egg">
+  <div class="terminal-easter-egg" id="terminal" role="dialog" aria-label="Developer terminal">
     <div class="terminal-header">
       <div class="terminal-dots">
-        <span class="terminal-dot red"></span>
-        <span class="terminal-dot yellow"></span>
-        <span class="terminal-dot green"></span>
+        <span class="terminal-dot red" title="Close"></span>
+        <span class="terminal-dot yellow" title="Minimize"></span>
+        <span class="terminal-dot green" title="Maximize"></span>
       </div>
-      <span class="terminal-title">portfolio.term ~ $</span>
+      <div class="terminal-title-bar">
+        <span class="terminal-title-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM7 5h2v5H7V5zm0 7h2v2H7v-2z"/></svg>
+        </span>
+        <span class="terminal-title-text">portfolio.term</span>
+        <span class="terminal-title-path">~</span>
+        <span class="terminal-status" id="terminalStatus" title="Ready">●</span>
+      </div>
+      <div class="terminal-header-actions">
+        <button class="terminal-header-btn" id="terminalClear" title="Clear (Ctrl+L)" aria-label="Clear terminal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+        <button class="terminal-header-btn" id="terminalMinimize" title="Minimize" aria-label="Minimize terminal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+      </div>
     </div>
-    <div class="terminal-body" id="terminalBody">
-      <div class="terminal-line"><span class="terminal-prompt">kiseki@portfolio:~$</span> <span class="terminal-output">Welcome to the secret terminal. Type 'help' for commands.</span></div>
-      <div class="terminal-line"><span class="terminal-prompt">kiseki@portfolio:~$</span> <span class="terminal-output">_</span></div>
+    <div class="terminal-body" id="terminalBody" role="log" aria-live="polite">
+      <div class="terminal-line terminal-welcome">
+        <div class="terminal-banner">
+          <div class="terminal-banner-line"></div>
+          <div class="terminal-banner-text">KISEKITANTO PORTFOLIO TERMINAL</div>
+          <div class="terminal-banner-line"></div>
+        </div>
+        <div class="terminal-motd">
+          <span class="terminal-motd-label">System:</span> Godot 4.7 | GDScript | Windows 11
+        </div>
+        <div class="terminal-motd">
+          <span class="terminal-motd-label">Status:</span> <span class="terminal-status-ok">ACTIVE</span> — Building games that don't suck
+        </div>
+        <div class="terminal-motd">
+          <span class="terminal-motd-label">Type</span> <kbd class="terminal-kbd">help</kbd> <span class="terminal-motd-label">for commands</span>
+        </div>
+      </div>
+      <div class="terminal-line terminal-prompt-line" id="promptLine">
+        <span class="terminal-prompt" data-prompt="kiseki@portfolio:~$"></span>
+        <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false" aria-label="Terminal command input" autocapitalize="off" autocorrect="off">
+        <span class="terminal-cursor" aria-hidden="true"></span>
+      </div>
     </div>
-    <div class="terminal-input-line">
-      <span class="terminal-prompt">kiseki@portfolio:~$</span>
-      <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false" aria-label="Terminal input">
+    <div class="terminal-footer">
+      <div class="terminal-hints">
+        <kbd>Ctrl+`</kbd> Toggle &nbsp; <kbd>Ctrl+L</kbd> Clear &nbsp; <kbd>↑/↓</kbd> History &nbsp; <kbd>Tab</kbd> Complete &nbsp; <kbd>Esc</kbd> Close
+      </div>
     </div>
   </div>
 
