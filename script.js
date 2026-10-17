@@ -135,56 +135,76 @@ function initStatCounters() {
 }
 
 // ============================================================================
-// TERMINAL EASTER EGG (Hidden terminal with commands)
+// TERMINAL EASTER EGG — Professional Dev Terminal
 // ============================================================================
 
 function initTerminal() {
   const terminalToggle = document.getElementById('terminalToggle');
   const terminal = document.getElementById('terminal');
   const terminalBody = document.getElementById('terminalBody');
+  const terminalInput = document.getElementById('terminalInput');
+  const terminalClear = document.getElementById('terminalClear');
+  const terminalMinimize = document.getElementById('terminalMinimize');
+  const promptLine = document.getElementById('promptLine');
 
-  if (!terminalToggle || !terminal || !terminalBody) return;
+  if (!terminalToggle || !terminal || !terminalBody || !terminalInput) return;
 
   // --- COMMAND DEFINITIONS ---
-  // Add new commands here: 'commandName': 'output text\nwith\nnewlines'
+  // Add new commands here: 'commandName': { output: 'text', type: 'info|success|warning|error|dim' }
   const commands = {
-    help: `Available commands:
+    help: {
+      output: `Available commands:
   help          - Show this help
   about         - About me
   projects      - List projects
   stack         - Tech stack
   contact       - Contact info
   easter        - Secret unlock
-  clear         - Clear terminal
-  exit          - Close terminal`,
+  clear         - Clear terminal (Ctrl+L)
+  exit          - Close terminal (Esc)`,
+      type: 'info'
+    },
 
-    about: `Kisekitanto (Rahman)
+    about: {
+      output: `Kisekitanto (Rahman)
 Indonesia | 15 years old
 Godot 4.7 beginner | 18 months in
 Building: 2D top-down RPG + procgen
 Story: Pre-written (Undertale/Stardew vibes)
 Current pain: := type inference, file corruption`,
+      type: 'info'
+    },
 
-    projects: `Active projects:
+    projects: {
+      output: `Active projects:
 1. Unnamed RPG - Godot 4.7, TileMapLayer, Dialogic, State Machine
 2. ProcGen World - Biome blending, coastline beaches, Gaea
 3. Combat System - Slice/Pierce/Crush, stamina-gated
 4. Dialogic Narrative - Branching, BBCode, localization`,
+      type: 'info'
+    },
 
-    stack: `Daily drivers:
+    stack: {
+      output: `Daily drivers:
 Engine: Godot 4.7 (GDScript)
 Plugins: Dialogic 2.x, FastNoiseLite, Gaea
 VCS: Git + GitHub (manual commits)
 Learning: Source code > tutorials
 Debugging: print() > breakpoints`,
+      type: 'info'
+    },
 
-    contact: `Get in touch:
+    contact: {
+      output: `Get in touch:
 Email: abdurrahman04791@gmail.com
 GitHub: github.com/Kisekitanto
 Godot Q&A: godotengine.org/qa/user/Kisekitanto
 Discord: kisekitanto (rarely online)`,
+      type: 'info'
+    },
 
-    easter: `🎮  SECRET UNLOCKED  🎮
+    easter: {
+      output: `🎮  SECRET UNLOCKED  🎮
 
 You found the developer console!
 Here's a secret: the biome blending uses
@@ -194,120 +214,160 @@ water tiles toward land, place sand where
 slope < 15°. Took 3 weeks to get right.
 
 Also: Shift = run. Diagonals normalized.
-You're welcome.`
+You're welcome.`,
+      type: 'success'
+    }
   };
 
   // --- TERMINAL STATE ---
   let terminalHistory = [];
   let historyIndex = -1;
+  let isProcessing = false;
 
-  // --- HELPER: Append a line to terminal output ---
-  function appendLine(html, isPrompt = true) {
+  // --- HELPER: Escape HTML ---
+  function escapeHtml(text) {
     const div = document.createElement('div');
-    div.className = 'terminal-line';
-    if (isPrompt) {
-      div.innerHTML = `<span class="terminal-prompt">kiseki@portfolio:~$</span> ${html}`;
-    } else {
-      div.innerHTML = `<span class="terminal-output">${html}</span>`;
-    }
+    div.textContent = text;
+    return div.innerHTML;
+  }
 
-    // Insert before the input line (last child)
-    const lastLine = terminalBody.lastElementChild;
-    if (lastLine && lastLine.querySelector('.terminal-input')) {
-      terminalBody.insertBefore(div, lastLine);
-    } else {
-      terminalBody.appendChild(div);
-    }
+  // --- HELPER: Append output line ---
+  function appendOutput(text, type = 'output') {
+    const div = document.createElement('div');
+    div.className = `terminal-line output`;
+    const escaped = escapeHtml(text);
+    const typeClass = type !== 'output' ? ` terminal-output.${type}` : '';
+    div.innerHTML = `<span class="terminal-output${typeClass}">${escaped.replace(/\n/g, '<br>')}</span>`;
+    
+    // Insert before prompt line
+    terminalBody.insertBefore(div, promptLine);
     terminalBody.scrollTop = terminalBody.scrollHeight;
+  }
+
+  // --- HELPER: Append command echo ---
+  function appendEcho(cmd) {
+    const div = document.createElement('div');
+    div.className = 'terminal-line echo';
+    div.innerHTML = `<span class="terminal-prompt" data-prompt="kiseki@portfolio:~$"></span><span class="terminal-output"><span class="cmd">${escapeHtml(cmd)}</span></span>`;
+    terminalBody.insertBefore(div, promptLine);
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+  }
+
+  // --- HELPER: Clear terminal (keep welcome banner) ---
+  function clearTerminal() {
+    // Remove all lines except welcome and prompt
+    const lines = terminalBody.querySelectorAll('.terminal-line:not(.terminal-welcome):not(.terminal-prompt-line)');
+    lines.forEach(line => line.remove());
   }
 
   // --- HELPER: Process a command ---
   function processCommand(cmd) {
+    if (isProcessing) return;
+    isProcessing = true;
+
     const cleanCmd = cmd.trim().toLowerCase();
-    if (!cleanCmd) return;
+    
+    // Show what user typed
+    appendEcho(cmd);
+    
+    // Clear input
+    terminalInput.value = '';
 
-    appendLine(cmd, true); // Show what user typed
-
-    if (commands[cleanCmd]) {
-      // Split multi-line output into separate terminal-output spans
-      const output = commands[cleanCmd]
-        .split('\n')
-        .map(l => `<span class="terminal-output">${l}</span>`)
-        .join('');
-      appendLine(output, false);
-    } else if (cleanCmd === 'clear') {
-      terminalBody.innerHTML = '';
-      // Re-create input line
-      createInputLine();
+    if (!cleanCmd) {
+      isProcessing = false;
       return;
-    } else if (cleanCmd === 'exit') {
-      closeTerminal();
-      return;
-    } else {
-      appendLine(`Command not found: ${cleanCmd}. Type 'help' for commands.`, false);
     }
 
-    // Add new input line after command
-    createInputLine();
+    // Built-in commands
+    if (cleanCmd === 'clear') {
+      clearTerminal();
+      isProcessing = false;
+      return;
+    }
+    if (cleanCmd === 'exit') {
+      closeTerminal();
+      isProcessing = false;
+      return;
+    }
+
+    // Defined commands
+    if (commands[cleanCmd]) {
+      const { output, type } = commands[cleanCmd];
+      // Simulate slight delay for realism
+      setTimeout(() => {
+        appendOutput(output, type);
+        isProcessing = false;
+      }, 50);
+    } else {
+      setTimeout(() => {
+        appendOutput(`Command not found: ${cleanCmd}. Type 'help' for commands.`, 'error');
+        isProcessing = false;
+      }, 50);
+    }
   }
 
-  // --- HELPER: Create fresh input line ---
-  function createInputLine() {
-    const inputLine = document.createElement('div');
-    inputLine.className = 'terminal-line';
-    inputLine.innerHTML = `<span class="terminal-prompt">kiseki@portfolio:~$</span><input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false">`;
-    terminalBody.appendChild(inputLine);
-    const newInput = document.getElementById('terminalInput');
-    newInput.focus();
-    bindTerminalInput(newInput);
-  }
-
-  // --- HELPER: Bind keyboard events to input ---
-  function bindTerminalInput(input) {
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const cmd = input.value;
-        terminalHistory.push(cmd);
-        historyIndex = terminalHistory.length;
-        processCommand(cmd);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (historyIndex > 0) {
-          historyIndex--;
-          input.value = terminalHistory[historyIndex];
-        }
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (historyIndex < terminalHistory.length - 1) {
-          historyIndex++;
-          input.value = terminalHistory[historyIndex];
-        } else {
-          historyIndex = terminalHistory.length;
-          input.value = '';
-        }
-      } else if (e.key === 'Tab') {
-        e.preventDefault();
-        // Tab completion for known commands
-        const val = input.value.toLowerCase();
-        const matches = Object.keys(commands).filter(c => c.startsWith(val));
-        if (matches.length === 1) {
-          input.value = matches[0];
-        } else if (matches.length > 1) {
-          appendLine(matches.join('  '), false);
-        }
+  // --- KEYBOARD EVENTS FOR INPUT ---
+  terminalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const cmd = terminalInput.value;
+      terminalHistory.push(cmd);
+      historyIndex = terminalHistory.length;
+      processCommand(cmd);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        terminalInput.value = terminalHistory[historyIndex];
+        // Move cursor to end
+        terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length);
       }
-    });
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < terminalHistory.length - 1) {
+        historyIndex++;
+        terminalInput.value = terminalHistory[historyIndex];
+      } else {
+        historyIndex = terminalHistory.length;
+        terminalInput.value = '';
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      // Tab completion for known commands
+      const val = terminalInput.value.toLowerCase();
+      const matches = Object.keys(commands).filter(c => c.startsWith(val));
+      if (matches.length === 1) {
+        terminalInput.value = matches[0];
+      } else if (matches.length > 1) {
+        appendOutput(matches.join('  '), 'dim');
+      }
+    } else if (e.key === 'l' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      clearTerminal();
+    }
+  });
+
+  // Focus input on click anywhere in terminal body
+  terminalBody.addEventListener('click', (e) => {
+    if (e.target === terminalBody || e.target.closest('.terminal-line.output')) {
+      terminalInput.focus();
+    }
+  });
+
+  // --- HEADER BUTTONS ---
+  if (terminalClear) {
+    terminalClear.addEventListener('click', clearTerminal);
+  }
+  if (terminalMinimize) {
+    terminalMinimize.addEventListener('click', closeTerminal);
   }
 
   // --- OPEN/CLOSE TERMINAL ---
   function openTerminal() {
     terminal.classList.add('open');
     terminalToggle.style.display = 'none';
-    setTimeout(() => {
-      const input = document.getElementById('terminalInput');
-      if (input) input.focus();
-    }, 100);
+    // Focus input after animation
+    setTimeout(() => terminalInput.focus(), 120);
   }
 
   function closeTerminal() {
@@ -318,25 +378,32 @@ You're welcome.`
   // --- EVENT LISTENERS ---
   terminalToggle.addEventListener('click', openTerminal);
 
-  // Click outside terminal to close
+  // Click outside terminal to close (but not on header/buttons)
   terminal.addEventListener('click', (e) => {
     if (e.target === terminal) closeTerminal();
   });
 
-  // ESC to close
+  // ESC to close, Ctrl+` to toggle
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && terminal.classList.contains('open')) closeTerminal();
-
-    // Ctrl+` (backtick) to toggle terminal
-    if (e.ctrlKey && e.key === '`') {
+    if (e.key === 'Escape' && terminal.classList.contains('open')) {
+      closeTerminal();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === '`') {
       e.preventDefault();
       if (terminal.classList.contains('open')) closeTerminal();
       else openTerminal();
     }
   });
 
-  // Initial input binding
-  bindTerminalInput(document.getElementById('terminalInput'));
+  // Initial focus handler
+  terminalInput.addEventListener('focus', () => {
+    promptLine.classList.add('focused');
+  });
+  terminalInput.addEventListener('blur', () => {
+    promptLine.classList.remove('focused');
+  });
+
+  console.log('🎮 Terminal ready. Press Ctrl+` to toggle.');
 }
 
 // ============================================================================
